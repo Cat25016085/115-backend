@@ -36,20 +36,21 @@ def call_model(messages):
     }
 
     response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
-    data = response.json()
 
+    # Print the status first so it is visible even if the body is not JSON.
     print("status:", response.status_code)
+    data = response.json()
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
     if response.ok:
         print("reply:", data["choices"][0]["message"]["content"])
     else:
-        print("error:", data)
+        print("error:", data.get("error", data))
 
     return data
 
 
 if __name__ == "__main__":
     call_model([
-        {"role": "user", "content": "Explain HTTP in one sentence."},
+        {"role": "user", "content": "用一句話說明什麼是 HTTP"},
     ])
